@@ -1,0 +1,18 @@
+# This script will automatically be executed by the "init" container during server directory initialization
+
+# Stop on most errors
+set on-error continue-if-exists
+
+# Create and switch to a data store called "default"
+dstore create "default"
+active "default"
+
+# Set data store properties:
+# E.g. Allow importing non-standard literal types
+dsprop set invalid-literal-policy as-string
+
+# Other commands you can put here (see https://docs.oxfordsemantic.tech/rdfox-shell.html#shell-commands):
+# - create roles and grant privileges
+# - import data
+# - register data sources
+# - print diagnostic information

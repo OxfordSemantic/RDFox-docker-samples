@@ -1,0 +1,45 @@
+services:
+  rdfox-init:
+    image: oxfordsemantic/rdfox-init:$RDFOX_VERSION
+    command:
+      # The syntax is described here: https://docs.oxfordsemantic.tech/rdfox-executable.html#init
+      # Server parameters can be found at: https://docs.oxfordsemantic.tech/servers.html#server-parameters
+      # Endpoint parameters can be found at: https://docs.oxfordsemantic.tech/rdfox-endpoint.html#endpoint-parameters
+      # NOTE: "channel" should be set to "tls" if required
+
+      # Parameters specified here are only applied when the server directory is first initialized, not to pre-initialized directories.
+      # For mutable parameters, values specified in main container will take precedence.
+      >-
+      -persistence file
+      -channel unsecure
+      init
+    environment:
+      - RDFOX_ROLE
+      - RDFOX_PASSWORD
+    volumes:
+      - ./server-directory:/home/rdfox/.RDFox
+      - ./RDFox.lic:/opt/RDFox/RDFox.lic
+      - ./data:/data
+  rdfox:
+    image: oxfordsemantic/rdfox:$RDFOX_VERSION
+    restart: always
+    cap_drop:
+      - ALL
+    command:
+      # The syntax is described here: https://docs.oxfordsemantic.tech/rdfox-executable.html#daemon
+      # Server parameters can be found at: https://docs.oxfordsemantic.tech/servers.html#server-parameters
+      # Endpoint parameters can be found at: https://docs.oxfordsemantic.tech/rdfox-endpoint.html#endpoint-parameters
+      >-
+      -request-logger elf
+      -elf-logger-fields "time x-agent-name sc(RDFox-Request-ID) cs-method cs-uri-stem sc-status x-protocol-error sc-bytes time-taken"
+      daemon
+    ports:
+      - 12110:12110
+    volumes:
+      - ./server-directory:/home/rdfox/.RDFox
+      - ./RDFox.lic:/opt/RDFox/RDFox.lic
+      - ./data:/data
+    depends_on:
+      rdfox-init:
+        condition: service_completed_successfully
+

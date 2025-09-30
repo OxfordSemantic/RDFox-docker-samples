@@ -1,0 +1,6 @@
+# License files:
+*.lic
+
+# Mac-specific files:
+.DS_Store
+
