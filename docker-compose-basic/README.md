@@ -2,7 +2,7 @@
 
 A basic sample for deploying RDFox using a Compose template. Includes:
 1. `rdfox-init` - This container initializes an RDFox server directory. It runs with standard system configuration.
-2. `rdfox` - The main RDFox container meant to serve user requests. Can run with limited system permissions ("capabilites") for enhanced security - see "cap_drop" in `compose.yaml`.
+2. `rdfox` - The main RDFox container meant to serve user requests. Can run with limited system permissions ("capabilities") for enhanced security - see "cap_drop" in `compose.yaml`.
 
 ## Starting the deployment
 1. Install and start either Docker engine or an alternative like Podman.
